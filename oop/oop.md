@@ -678,10 +678,59 @@ std::cout << Sum<char>(‘Z’, ’j’) << "\n";
 ```
 
 
+# Comparison 
+```cpp
+return a > b ? a : b
+```
+
+
+# Deduction
+Deduction occurs when you instantiate an object without explicitly identifying the types. Instead, the compiler "deduces" the types. This can be helpful for writing code that is generic and can handle a variety of inputs.
+
+```cpp
+template <typename Type> Type average(Type a, Type b){
+    return (a+b)/2;
+}
+int main() { assert(average(2.0,5.0) == 3.5); }
+
+std::vector v{1,2,3}; //let compiler decude type of vector
+```
+
+
+```cpp
+template<typename KeyType, typename ValueType>
+
+class Mapping {
+public:
+  Mapping(KeyType key, ValueType value) : key(key), value(value) {}
+  std::string Print() const {
+    std::ostringstream stream;
+    stream << key << ": " << value;
+    return stream.str();
+  }
+  KeyType key;
+  ValueType value;
+};
+
+// Test
+int main() {
+  Mapping<std::string, int> 
+```
+
+
 
 ```cpp
 
 ```
+
+```cpp
+
+```
+
+```cpp
+
+```
+
 
 ```cpp
 

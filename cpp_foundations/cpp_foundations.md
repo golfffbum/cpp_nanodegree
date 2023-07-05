@@ -381,6 +381,24 @@ The main advantage of emplace_back over push_back is that it avoids unnecessary 
 
 When we say that an element is "constructed in place," it means that the element is created directly within the container's memory space without any additional copies or moves. In other words, the memory required for the element is allocated within the container itself.
 
+## Priority queue
+A C++ priority queue is a type of container adapter, specifically designed such that the first element of the queue is either the greatest or the smallest of all elements in the queue, and elements are in non-increasing or non-decreasing order (hence we can see that each element of the queue has a priority {fixed order}).
+
+In C++ STL, the top element is always the greatest by default. We can also change it to the smallest element at the top. Priority queues are built on the top of the max heap and use an array or vector as an internal structure. In simple terms, STL Priority Queue is the implementation of Heap Data Structure.
+
+- when using a vetor to keep track of visited nodes and need to get the node with min sum, if having to resort everytime takes O(NlogN) which isnt efficient. 
+- using a priority queue keeps the max or min value at the top of the heap which takes O(1) time to delete an element 
+- Configure the queue to ensure the minimum remains at the top 
+```cpp
+std::priority_queue<RouteModel::Node*, std::vector<RouteModel::Node*>, CompareNodes> open_queue;
+
+bool CompareNodes::operator()(RouteModel::Node *node1, RouteModel::Node *node2){
+  return (node1->g_value + node1->h_value) > (node2->g_value + node2->h_value);
+}
+```
+
+
+
 ## to ask 
 when to use a reference? instead of just sending the variable
 
@@ -398,4 +416,3 @@ target_link_libraries(OSM_A_star_search
 ## namespace vs classes? 
 linux parser when to use?
 - could be extented to different systems? 
-- 

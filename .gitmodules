@@ -1,6 +1,9 @@
 [submodule "cpp_foundations/route_planning_project/CppND-Route-Planning-Project"]
 	path = cpp_foundations/route_planning_project/CppND-Route-Planning-Project
 	url = git@github.com:golfffbum/CppND-Route-Planning-Project.git
-[submodule "oop/CppND-System-Monitor"]
-	path = oop/CppND-System-Monitor
+[submodule "cpp_foundations/route_planning_project/P0267_RefImpl"]
+	path = cpp_foundations/route_planning_project/P0267_RefImpl
+	url = https://github.com/cpp-io2d/P0267_RefImpl.git
+[submodule "oop/project_system_monitor/CppND-System-Monitor"]
+	path = oop/project_system_monitor/CppND-System-Monitor
 	url = git@github.com:golfffbum/CppND-System-Monitor.git
