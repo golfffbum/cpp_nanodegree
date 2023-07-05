@@ -1,0 +1,6 @@
+[submodule "cpp_foundations/route_planning_project/CppND-Route-Planning-Project"]
+	path = cpp_foundations/route_planning_project/CppND-Route-Planning-Project
+	url = git@github.com:golfffbum/CppND-Route-Planning-Project.git
+[submodule "oop/CppND-System-Monitor"]
+	path = oop/CppND-System-Monitor
+	url = git@github.com:golfffbum/CppND-System-Monitor.git
