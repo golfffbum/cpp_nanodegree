@@ -7,3 +7,6 @@
 [submodule "oop/project_system_monitor/CppND-System-Monitor"]
 	path = oop/project_system_monitor/CppND-System-Monitor
 	url = git@github.com:golfffbum/CppND-System-Monitor.git
+[submodule "memory_management/CppND-Memory-Management-Chatbot"]
+	path = memory_management/CppND-Memory-Management-Chatbot
+	url = https://github.com/golfffbum/CppND-Memory-Management-Chatbot.git
