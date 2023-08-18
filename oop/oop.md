@@ -718,20 +718,17 @@ int main() {
 ```
 
 
+# System Monitor Project 
+the system monitor can be made on a Linux terminal with a single command line. Let's have a look at the following command. It shows ten processes sorted by their memory utilization. 
 
-```cpp
+`ps -eo user,pid,size,pcpu,comm | sort -nr -k 3 | head -n 10`
 
-```
+The details are as follows ps -e shows all the processes. The -o option adds custom formatting according to the parameters that follow  the user is the user account that started the process. PID is the process id. Size is the memory size, pcpu is the process CPU utilization, and comm is the command that started it. 
 
-```cpp
+sort is to sort the process -n and -r options mean the sorting is based on **n**umerical value, and it's **r**eversed. The -k option is the third column which is the size (memory utilization). 
 
-```
+head -n 10 means to cut only the first ten rows of the returned sorted list of processes. 
 
-```cpp
+The same command can also be set to sort the processes according to CPU utilization.
 
-```
-
-
-```cpp
-
-```
+`ps -eo user,pid,size,pcpu,comm | sort -nr -k 4 | head -n 10`

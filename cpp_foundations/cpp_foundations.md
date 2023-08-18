@@ -397,7 +397,41 @@ bool CompareNodes::operator()(RouteModel::Node *node1, RouteModel::Node *node2){
 }
 ```
 
+# Route Planning Project 
 
+## Constructor
+Route planner constructor,
+```
+RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, float end_x, float end_y): m_Model(model) {
+}
+```
+The constructor takes several parameters: model, start_x, start_y, end_x, and end_y. Additionally, it initializes the member variable m_Model using an initialization list.
+The initialization list initializes m_Model with the value of model.
+The purpose of using the initialization list is to set the initial values of member variables before the constructor's body is executed. It allows you to initialize member variables directly, often providing better performance and more efficient initialization compared to assigning values in the constructor body.
+
+## References vs Pointers
+```
+RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, float end_x, float end_y): m_Model(model)
+```
+
+Model is defined as a reference (RouteModel &model) in the constructor of the RoutePlanner class. This is done to avoid unnecessary object copying and to work directly with the original RouteModel object.
+
+Here are a few reasons why model might be defined as a reference:
+
+1. Avoiding Object Copying: By using a reference, you can work directly with the original RouteModel object passed to the constructor. If model were defined as a value (without the reference), it would create a copy of the RouteModel object, which may be inefficient if the object is large or expensive to copy.
+2. Modifying the Original Object: When model is defined as a reference, any modifications made to model within the RoutePlanner class will directly affect the original RouteModel object that was passed as an argument. This can be useful if you want to modify the original object or access its state without the need for additional copies.
+3. Polymorphism and Inheritance: Using references allows you to work with base classes or interfaces, enabling polymorphism and inheritance. By using a reference to a base class, you can pass derived class objects and take advantage of dynamic dispatch and virtual function calls.
+
+- It's important to note that when using a reference, you need to ensure that the referenced object remains valid for the duration of its usage. If the object being referenced goes out of scope or is destroyed, attempting to access the reference will result in undefined behavior. In summary, defining model as a reference allows direct access and modification of the original RouteModel object, avoids unnecessary copying, and facilitates working with polymorphism and inheritance.
+
+Defining model as a pointer (RouteModel* model) instead of a reference is another valid option in C++. Using a pointer provides similar benefits and functionality as a reference, but there are some differences to consider. Here are a few reasons why you might choose a pointer instead of a reference:
+
+1. Nullability: Pointers can be assigned a nullptr value, indicating that they are not currently pointing to a valid object. This can be useful in scenarios where the object being referred to may not always be available or optional. References, on the other hand, must always be bound to a valid object and cannot be null.
+2. Reassignment: Pointers can be reassigned to point to different objects throughout their lifetime. This allows you to change the object being pointed to if needed. In contrast, references are bound to an object upon initialization and cannot be rebound to refer to a different object.
+3. Optional Ownership: Pointers can be used to express ownership relationships, such as indicating whether the RoutePlanner class owns the RouteModel object or merely references it. If ownership semantics are important in your design, using a pointer can provide clearer intent.
+4. Polymorphism and Dynamic Dispatch: Pointers to base classes or interfaces allow for dynamic dispatch and polymorphic behavior. With a pointer, you can work with derived class objects and take advantage of virtual function calls and polymorphic behavior.
+
+- It's worth noting that when using pointers, you need to handle potential null values and ensure proper memory management, such as allocating and deallocating memory appropriately. In summary, using a pointer (RouteModel* model) provides nullability, reassignment capabilities, and ownership semantics. However, it introduces additional responsibilities for null checks and memory management compared to references. The choice between a pointer and a reference depends on the specific requirements and design of your application.
 
 ## to ask 
 when to use a reference? instead of just sending the variable
