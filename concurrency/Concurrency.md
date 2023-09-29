@@ -599,7 +599,7 @@ Using threads follows a basic concept called "fork-join-parallelism". The basic 
 
 The following diagram illustrates the basic idea of forking:
 
-![Image](/img/fork.jpg)
+![Image](./img/fork.jpg)
 
 In the main thread, the program flow is forked into three parallel branches. In both worker branches, some work is performed - which is why threads are often referred to as "worker threads". Once the work is completed, the flow of execution is united again in the main function using the `join()` command. In this example, join acts as a barrier where all threads are united. The execution of main is in fact halted, until both worker threads have successfully completed their respective work.
 
@@ -932,11 +932,11 @@ Determining the optimal number of threads to use is a hard problem. It usually d
 
 Internally, this is achieved by using thread-pools wich represent the number of available threads based on the cores/processors as well as by using work-stealing queues, where tasks are re-distributed among the available processors dynamically. The following diagram shows the principal of task distribution on a multi-core system using work stealing queues.
 
-![[Pasted image 20230830230857.png]]
+![](./img/taskBased.png)
 
 As can be seen, the first core in the example is heavily oversubscribed with several tasks that are waiting to be executed. The other cores however are running idle. The idea of a work-stealing queue is to have a watchdog program running in the background that regularly monitors the amount of work performed by each processor and redistributes it as needed. For the above example this would mean that tasks waiting for execution on the first core would be shifted (or "stolen") from busy cores and added to available free cores such that idle time is reduced. After this rearranging procedire, the task distribution in our example could look as shown in the following diagram.
 
-![[Pasted image 20230830231034.png]]
+![](./img/Pasted%20image%2020230830231034.png)
 
 A work distribution in this manner can only work, when parallelism is explicitly described in the program by the programmer. If this is not the case, work-stealing will not perform effectively.
 
@@ -999,22 +999,22 @@ int main()
 In `main()`, a for-loop starts a configurable number of tasks that can either be executed synchronously or asynchronously. As an experiment, we will now use a number of different parameter settings to execute the program and evaluate the time it takes to finish the computations. The idea is to gauge the effect of the number of threads on the overall runtime:
 
 1. int nLoops = 1e7 , nThreads = 4 , std::launch::async
-![[Pasted image 20230830231620.png]]
+![](./img/Pasted%20image%2020230830231620.png)
     With this set of parameters, the high workload is computed in parallel, with an overall runtime of ~45 milliseconds.
     
 2. int nLoops = 1e7 , nThreads = 5 , std::launch::deferred
     
-![[Pasted image 20230830231642.png]]
+![](./img/Pasted%20image%2020230830231642.png)
     The difference to the first set of parameters is the synchronous execution of the tasks - all computations are performed sequentially - with an overall runtime of ~126 milliseconds. While impressive with regard to the achieved speed-up, the relative runtime advantage of setting 1 to this settings is at a factor of ~2.8 on a 4-core machine.
     
 3. int nLoops = 10 , nThreads = 5 , std::launch::async
     
-![[Pasted image 20230830231652.png]]
+![](./img/Pasted%20image%2020230830231652.png)
     In this parameter setting, the tasks are run in parallel again but with a significantly lower number of computations: The thread function now computes only 10 square roots where with settings 1 and 2 a total of 10.000.000 square roots were computed. The overall runtime of this example therefore is significantly lower with only ~3 milliseconds.
     
 4. int nLoops = 10 , nThreads = 5 , std::launch::deferred
     
-![[Pasted image 20230830231700.png]]
+![](./img/Pasted%20image%2020230830231700.png)
     In this last example, the same 10 square roots are computed sequentially. Surprising, the overall runtime is at only 0.01 milliseconds - an astounding difference to the asynchronous execution and a stark reminder that starting and managing threads takes a significant amount of time. It is therefore not a general advantage if computations are performed in parallel: It must be carefully weighed with regard to the computational effort whether parallelization makes sense.
 
 # Avoiding Data Races
@@ -1022,7 +1022,7 @@ In `main()`, a for-loop starts a configurable number of tasks that can either b
 One of the primary sources of error in concurrent programming are data races. They occur, **when two concurrent threads are accessing the same memory location while at least one of them is modifying** (the other thread might be reading or modifying). In this scenario, the value at the memory location is completely undefined. Depending on the system scheduler, the second thread will be executed at an unknown point in time and thus see different data at the memory location with each execution. Depending on the type of program, the result might be anything from a crash to a security breach when data is read by a thread that was not meant to be read, such as a user password or other sensitive information. Such an error is called a „data race“ because two threads are racing to get access to a memory location first, with the content at the memory location depending on the result of the race.
 
 The following diagram illustrates the principle: One thread wants to increment a variable `x`, whereas the other thread wants to print the same variable. Depending on the timing of the program and thus the order of execution, the printed result might change each time the program is executed.
-![[Pasted image 20230901145029.png]]
+![](./img/Pasted%20image%2020230901145029.png)
 
 In this example, one safe way of passing data to a thread would be to carefully synchronize the two threads using either `join()` or the promise-future concept that can guarantee the availability of a result. Data races are always to be avoided. Even if nothing bad seems to happen, they are a bug and should always be treated as such. Another possible solution for the above example would be to make a copy of the original argument and pass the copy to the thread, thereby preventing the data race.
 
@@ -1355,7 +1355,7 @@ We have seen that in order to avoid data races, we need to either forego accessi
 
 Recall that a data race requires simultaneous access from two threads. If we can **guarantee that only a single thread at a time can access a particular memory location, data races would not occur**. In order for this to work, we would need to establish a communication protocol. It is important to note that a mutex is not the solution to the data race problem per se but merely an enabler for a thread-safe communication protocol that has to be implemented and adhered to by the programmer.
 
-![[Pasted image 20230906135711.png]]
+![](./img/Pasted%20image%2020230906135711.png)
 
 Let us take a look at how this protocol works: Assuming we have a piece of memory (e.g. a shared variable) that we want to protect from simultaneous access, we can assign a mutex to be the guardian of this particular memory. It is important to understand that a mutex is bound to the memory it protects. A thread 1 who wants to access the protected memory must "lock" the mutex first. After thread 1 is "under the lock", a thread 2 is blocked from access to the shared variable, it can not acquire the lock on the mutex and is temporarily suspended by the system.
 
@@ -1671,7 +1671,7 @@ Let us take a closer look at this problem:
 
 `ThreadA` and `ThreadB` both require access to the console. Unfortunately, they request this resource which is protected by two mutexes in different order. If the two threads work interlocked so that first `ThreadA` locks mutex 1, then `ThreadB` locks mutex 2, the program is in a deadlock: Each thread tries to lock the other mutex and needs to wait for its release, which never comes. The following figure illustrates the problem graphically.
 
-![[Pasted image 20230906142916.png]]
+![](./img/Pasted%20image%2020230906142916.png)
 
 One way to avoid such a deadlock would be to number all resources and require that processes request resources only in strictly increasing (or decreasing) order. Please try to manually rearrange the locks and unlocks in a way that the deadlock does not occur and the following text is printed to the console:
 ```cpp
@@ -2021,7 +2021,7 @@ A `std::condition_variable` has a method `wait()`, which blocks, when it is c
 A condition variable is a low-level building block for more advanced communication protocols. It neither has a memory of its own nor does it remember notifications. Imagine that one thread calls `wait()` before another thread calls `notify()`, the condition variable works as expected and the first thread will wake up. Imagine the case however where the call order is reversed such that `notify()` is called before `wait()`, the notification will be lost and the thread will block indefinitely. So in more sophisticated communication protocols a condition variable should always be used in conjunction with another shared state that can be checked independently. Notifying a condition variable in this case would then only mean to proceed and check this other shared state.
 
 
-![[Pasted image 20230912215616.png]]
+![](./img/Pasted%20image%2020230912215616.png)
 
 As seen above, we are closing the gap between reading the state and entering the wait. We are reading the state under the lock (red bar) and we call wait still under the lock. Then, we let wait release the lock and enter the wait state in one atomic step. This is only possible because the `wait()` method is able to take a lock as an argument. The lock that we can pass to wait however is not the `lock_guard` we have been using so often until now but instead it has to be a lock that can be temporarily unlocked inside wait - a suitable lock for this purpose would be the `unique_lock` type which we have discussed in the previous section.
 
@@ -2059,14 +2059,14 @@ private:
 ```
 
 Before we continue, we need to discuss the problem of "spurious wake-ups": Once in a while, the system will - for no obvious reason - wake up a thread. If such a spurious wake-up happened with taking proper precautions, we would issue wait without new data being available (because the wake-up has not been caused by the condition variable but by the system in this case). To prevent the call to wait in this case, we have to modify the code slightly:
-![[Pasted image 20230912220312.png]]
+![](./img/Pasted%20image%2020230912220312.png)
 
 3. (continued) In this code, even after a spurious wake-up, we are now checking wether data really is available. If so, we would be issuing the call to wait on the condition variable. And only if we are inside wait, may other threads modify and access `dataIsAvailable`.
     
     If the vector is empty, `wait` is called. When the thread wakes up again, the condition is immediately re-checked and - in case it has not been a spurious wake-up we can continue with our job and retrieve the vector.
     
     We can further simplify this code by letting the `wait()` function do the testing as well as the looping for us. Instead of the while loop, we can just pass a Lambda to `wait()`, which repeatedly checks wether the vector contains elements (thus the inverted logical expression):
-    ![[Pasted image 20230912220518.png]]
+    ![](./img/Pasted%20image%2020230912220518.png)
 3. (continued) When `wait()` finishes, we are guaranteed to find a new element in the vector this time. Also, we are still holding the lock and thus no other thread is able to access the vector - so there is no danger of a data race in this situation. As soon as we are out of scope, the lock will be automatically released.
     
 4. In the main() function, there is still the polling loop that infinitely queries the availability of new Vehicle objects. But contrary to the example before, a call to popBack now puts the main() thread into a wait state and only resumes when new data is available - thus significantly reducing the load to the processor.
