@@ -10,3 +10,6 @@
 [submodule "memory_management/CppND-Memory-Management-Chatbot"]
 	path = memory_management/CppND-Memory-Management-Chatbot
 	url = https://github.com/golfffbum/CppND-Memory-Management-Chatbot.git
+[submodule "concurrency/CppND-Program-a-Concurrent-Traffic-Simulation"]
+	path = concurrency/CppND-Program-a-Concurrent-Traffic-Simulation
+	url = git@github.com:golfffbum/CppND-Program-a-Concurrent-Traffic-Simulation.git
